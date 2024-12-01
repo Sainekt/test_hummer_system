@@ -1,0 +1,24 @@
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card" style="width: 100%; max-width: 400px;">
+            <div class="card-body">
+                <h2 class="text-center">Авторизация</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form form %} <!-- Используем фильтр bootstrap для стилизации формы -->
+                    <button type="submit" class="btn btn-primary btn-block">Войти</button> <!-- Кнопка с классами Bootstrap -->
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
