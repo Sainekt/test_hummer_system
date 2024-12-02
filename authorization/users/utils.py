@@ -38,7 +38,7 @@ def sending_sms(confirm_code):
           '\nНикому не сообщайте еге.')
 
 
-def create_user_or_confirm_cod(phone_number, region):
+def create_user_or_confirm_cod(phone_number, region=None):
     user = User.objects.filter(phone_number=phone_number)
     confir_code = get_code(DICTIONARY_CONFIRM_CODE, 4)
     if not user.exists():

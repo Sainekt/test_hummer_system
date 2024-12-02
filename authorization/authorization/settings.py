@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'users.apps.UsersConfig',
     'django_bootstrap5',
+    'rest_framework.authtoken',
+    'rest_framework',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +131,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DJOSER = {
+    'HIDE_USERS': True,
+    'SERIALIZERS': {
+        'user': 'api.serializers.UserSerializer',
+        'current_user': 'api.serializers.UserSerializer',
+    },
+}
