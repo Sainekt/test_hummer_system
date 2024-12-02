@@ -10,7 +10,6 @@ class User(AbstractUser):
 
     email = models.EmailField(
         verbose_name='Адрес электронной почты.',
-        unique=True,
         error_messages={
             'unique': 'Адрес электронной почты уже используется.'
         },
@@ -74,7 +73,7 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
     def __str__(self):
-        return self.username
+        return (self.username if self.username else self.phone_number)
 
 
 class UserConfirmCode(models.Model):

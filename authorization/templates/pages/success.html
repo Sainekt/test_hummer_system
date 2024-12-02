@@ -1,0 +1,30 @@
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Успешный вход</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Добро пожаловать, {% if user.username %}{{user.username}}{% else %}{{user.phone_number}}{% endif %}!</h1>
+        <h3>Вы успешно вошли в свою учетную запись.
+        <p>Ваша реферальная ссылка {{ user.referal_code }}.</p></h3>
+        <div class="justify-content-center col-6">
+                <h2>Редактировать Информация о пользователе:</h2>
+                <form method='post' enctype="multipart/form-data" id='form1'>
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <div class="btn-group-vertical w-100"> 
+                        {% bootstrap_button button_type="submit" content="Отправить" %}
+                </form>
+            </div>
+        </div>
+
+
+        <a href="{% url 'pages:logout' %}">Выйти</a>
+    </div>
+</body>
+</html>

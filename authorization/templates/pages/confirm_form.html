@@ -14,8 +14,9 @@
                 <h2 class="text-center">Введите проверочный код</h2>
                 <form method="post">
                     {% csrf_token %}
-                    {% bootstrap_form form %} <!-- Используем фильтр bootstrap для стилизации формы -->
-                    <button type="submit" class="btn btn-primary btn-block">Подтвердить</button> <!-- Кнопка с классами Bootstrap -->
+                    {% bootstrap_form form %} 
+                    {{ form.phone_number }}
+                    <button type="submit" class="btn btn-primary btn-block">Подтвердить</button> 
                 </form>
             </div>
         </div>
