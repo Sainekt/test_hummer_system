@@ -1,8 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from django.db import models
-from .constants import MAX_150, MAX_254
 from django.core.validators import MinLengthValidator
+from django.db import models
+
+from .constants import MAX_150, MAX_254
 
 
 class User(AbstractUser):

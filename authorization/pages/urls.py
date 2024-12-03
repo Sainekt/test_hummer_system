@@ -1,10 +1,7 @@
 from django.urls import path
-from .views import (
-    AuthorizationFormView,
-    ConfirmFormView,
-    SuccessView,
-    LogoutView
-)
+
+from .views import (AuthorizationFormView, ConfirmFormView, LogoutView,
+                    SuccessView)
 
 app_name = 'pages'
 

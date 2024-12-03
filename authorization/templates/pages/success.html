@@ -21,6 +21,11 @@
                         {% bootstrap_button button_type="submit" content="Отправить" %}
                 </form>
             </div>
+            <h5>Вы приглосили</h5>
+            {% if invited %}
+            {% for invite in invited %}
+                <li>{{ invite.phone_number }}</li>
+            {% endfor %}{% endif %}
         </div>
 
 

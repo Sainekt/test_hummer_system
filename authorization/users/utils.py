@@ -1,7 +1,9 @@
-from django.contrib.auth import get_user_model
 import random
-from .models import UserConfirmCode
 from time import sleep
+
+from django.contrib.auth import get_user_model
+
+from .models import UserConfirmCode
 
 User = get_user_model()
 
@@ -35,7 +37,7 @@ def get_code(dictionary, length) -> str:
 def sending_sms(confirm_code):
     sleep(2)
     print(f'Ваш смс код подтверждения:{confirm_code}'
-          '\nНикому не сообщайте еге.')
+          '\nНикому не сообщайте его.')
 
 
 def create_user_or_confirm_cod(phone_number, region=None):

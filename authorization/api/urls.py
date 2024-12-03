@@ -2,7 +2,7 @@ from django.conf import settings
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
-from .views import UserViewSet, RequestSMSCodeView, VerifySMSCodeView
+from .views import RequestSMSCodeView, UserViewSet, VerifySMSCodeView
 
 app_name = 'api_v1'
 

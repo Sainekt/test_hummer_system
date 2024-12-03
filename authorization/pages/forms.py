@@ -1,10 +1,13 @@
 from django import forms
-from phonenumber_field.formfields import SplitPhoneNumberField
-from phonenumbers import parse, NumberParseException
-from django.core.exceptions import ValidationError
-from users.models import UserConfirmCode
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
+from phonenumber_field.formfields import SplitPhoneNumberField
+
+from users.models import UserConfirmCode
+
+from .validators import (confirm_code_validator, email_validator,
+                         invite_code_validator, phone_number_validator)
 
 User = get_user_model()
 
@@ -15,12 +18,9 @@ class PhoneLoginForm(forms.Form):
     def clean(self) -> tuple:
         form_region_code = self.data['phone_number_0']
         form_phone_number = self.data['phone_number_1']
-        try:
-            number = parse(form_phone_number, form_region_code)
-        except NumberParseException:
-            raise ValidationError('Введен не корректный номер телефона.')
-        phone_number = f'+{number.country_code}{number.national_number}'
-        return (form_region_code, phone_number)
+        region_code, phone_number = phone_number_validator(
+            form_phone_number, form_region_code)
+        return (region_code, phone_number)
 
 
 class ConfirmCodeForm(forms.Form):
@@ -33,12 +33,7 @@ class ConfirmCodeForm(forms.Form):
 
     def clean_confirm_code(self) -> str:
         value = self.cleaned_data.get('confirm_code')
-        if not value:
-            raise ValidationError('Поле не может быть пустым.')
-        if not value.isdigit():
-            raise ValidationError('Код должен состоять из 4 цифр.')
-        if len(value) != 4:
-            raise ValidationError('Введите 4-ех значный код.')
+        value = confirm_code_validator(value)
         return value
 
     def clean(self) -> dict:
@@ -70,22 +65,10 @@ class UpdateUserForm(forms.ModelForm):
 
     def clean_email(self) -> str:
         email = self.cleaned_data.get('email')
-        if self.user.email != email:
-            if not User.objects.filter(email=email).exists():
-                return email
-            raise ValidationError('Адрес электронной почты уже существует.')
-        return email
+        clean_email = email_validator(email, self.user, User)
+        return clean_email
 
     def clean_invite_code(self) -> str:
         value = self.cleaned_data.get('invite_code')
-        if value and len(value) != 6:
-            raise ValidationError('код должен состоять из 6 символов')
-        user_invite_code = User.objects.filter(referal_code=value)
-        if value and not user_invite_code.exists():
-            raise ValidationError('Код приглашения не существует.')
-        if self.user.invite_code:
-            raise ValidationError(
-                'Код приглашения можно активировать только 1 раз.')
-        if value == self.user.referal_code:
-            raise ValidationError('Нельзя использовать свой код приглашения.')
-        return value
+        clean_value = invite_code_validator(value, User, self.user)
+        return clean_value
