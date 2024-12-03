@@ -1,10 +1,11 @@
-from django.views.generic import FormView, UpdateView, RedirectView
-from .forms import PhoneLoginForm, ConfirmCodeForm, UpdateUserForm
-from django.urls import reverse_lazy
-from django.contrib.auth import get_user_model
-from users.utils import create_user_or_confirm_cod
-from django.contrib.auth import login, logout
+from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views.generic import FormView, RedirectView, UpdateView
+
+from users.utils import create_user_or_confirm_cod
+
+from .forms import ConfirmCodeForm, PhoneLoginForm, UpdateUserForm
 
 User = get_user_model()
 
@@ -63,6 +64,9 @@ class SuccessView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
+        invited = User.objects.filter(invite_code=user.referal_code)
+        context['invited'] = invited
         context['user'] = self.request.user
         return context
 
