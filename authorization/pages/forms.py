@@ -27,8 +27,7 @@ class ConfirmCodeForm(forms.Form):
     confirm_code = forms.CharField(
         label='Проверочный код',
         max_length=4,
-        help_text='Введите код из смс',
-        )
+        help_text='Введите код из смс',)
     phone_number = forms.CharField(widget=forms.HiddenInput())
 
     def clean_confirm_code(self) -> str:

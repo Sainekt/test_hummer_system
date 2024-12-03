@@ -39,12 +39,13 @@ def get_code(dictionary, length) -> str:
 
 def sending_sms(confirm_code):
     sleep(2)
+    sms = (f'Ваш смс код подтверждения:{confirm_code}'
+           '\nНикому не сообщайте его.')
+    logger.info(sms)
+    return sms
 
-    logger.info(f'Ваш смс код подтверждения:{confirm_code}'
-                '\nНикому не сообщайте его.')
 
-
-def create_user_or_confirm_cod(phone_number, region=None):
+def create_user_or_confirm_cod(phone_number, region=None) -> str:
     user = User.objects.filter(phone_number=phone_number)
     confir_code = get_code(DICTIONARY_CONFIRM_CODE, 4)
     if not user.exists():
@@ -58,8 +59,7 @@ def create_user_or_confirm_cod(phone_number, region=None):
             user=user,
             confir_code=confir_code,
         ).save()
-        sending_sms(confir_code)
-        return
+        return sending_sms(confir_code)
     user = user[0]
     confirm_code_obj = UserConfirmCode.objects.filter(user=user)
     if not confirm_code_obj.exists():
@@ -71,4 +71,4 @@ def create_user_or_confirm_cod(phone_number, region=None):
     confirm_code_obj = confirm_code_obj[0]
     confirm_code_obj.confir_code = confir_code
     confirm_code_obj.save()
-    sending_sms(confir_code)
+    return sending_sms(confir_code)

@@ -58,8 +58,8 @@ class PhoneNumberSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        phone_number = data['phone_number']
-        region_code = data['region_code']
+        phone_number = data.get('phone_number')
+        region_code = data.get('region_code')
         try:
             phone_number_validator(phone_number, region_code)
         except NumberParseException:
@@ -68,10 +68,8 @@ class PhoneNumberSerializer(serializers.Serializer):
         return data
 
     def create(self, validated_data):
-        phone_number = validated_data['phone_number']
-        region_code = validated_data['region_code']
-        if not region_code:
-            region_code = validated_data['region_code']
+        phone_number = validated_data.get('phone_number')
+        region_code = validated_data.get('region_code')
         create_user_or_confirm_cod(phone_number, region_code)
         validated_data['phone_number'] = (
             'Вам отправлен смс код потдверждения.'

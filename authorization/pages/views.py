@@ -17,8 +17,9 @@ class AuthorizationFormView(FormView):
 
     def form_valid(self, form):
         region, phone_number = form.cleaned_data
-        create_user_or_confirm_cod(phone_number, region)
+        sms = create_user_or_confirm_cod(phone_number, region)
         self.request.session['phone_number'] = phone_number
+        self.request.session['sms'] = sms
         return super().form_valid(form)
 
 
@@ -42,6 +43,11 @@ class ConfirmFormView(FormView):
         user = form.cleaned_data['user']
         login(self.request, user)
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sms'] = self.request.session.get('sms')
+        return context
 
 
 class SuccessView(UpdateView):
