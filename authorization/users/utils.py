@@ -1,5 +1,6 @@
 import random
 from time import sleep
+import logging
 
 from django.contrib.auth import get_user_model
 
@@ -7,6 +8,8 @@ from .models import UserConfirmCode
 
 User = get_user_model()
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 DICTIONARY_REFERAL_CODE = (
     'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz234567890'
@@ -36,8 +39,9 @@ def get_code(dictionary, length) -> str:
 
 def sending_sms(confirm_code):
     sleep(2)
-    print(f'Ваш смс код подтверждения:{confirm_code}'
-          '\nНикому не сообщайте его.')
+
+    logger.info(f'Ваш смс код подтверждения:{confirm_code}'
+                '\nНикому не сообщайте его.')
 
 
 def create_user_or_confirm_cod(phone_number, region=None):

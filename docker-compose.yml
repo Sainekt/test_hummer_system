@@ -1,0 +1,25 @@
+version: '3'
+
+volumes:
+  auth_db:
+
+services:
+
+  backend:
+    env_file:
+      - .env
+    build:
+      context: ./authorization
+      dockerfile: Dockerfile
+    command: sh -c "python manage.py collectstatic --noinput && python manage.py makemigrations && python manage.py migrate && gunicorn --bind 0.0.0.0:8000 authorization.wsgi:application"
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:16-alpine
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth_db:/var/lib/postgresql/data/

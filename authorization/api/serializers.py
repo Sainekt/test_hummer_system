@@ -53,7 +53,7 @@ class PhoneNumberSerializer(serializers.Serializer):
     region_code = serializers.CharField(
         max_length=5,
         min_length=1,
-        required=True
+        required=False
     )
 
     def validate(self, attrs):
